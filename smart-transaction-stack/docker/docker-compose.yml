@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  smart-tx-stack:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: smart-tx-stack
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ../data:/app/data
+      - ../.env:/app/.env:ro
+    environment:
+      - NODE_ENV=production
+      - SOLANA_RPC_URL=${SOLANA_RPC_URL:-https://api.mainnet-beta.solana.com}
+      - SOLANA_WS_URL=${SOLANA_WS_URL:-wss://api.mainnet-beta.solana.com}
+      - YELLOWSTONE_GRPC_ENDPOINT=${YELLOWSTONE_GRPC_ENDPOINT}
+      - YELLOWSTONE_X_TOKEN=${YELLOWSTONE_X_TOKEN:-}
+      - JITO_BLOCK_ENGINE_URL=${JITO_BLOCK_ENGINE_URL:-https://mainnet.block-engine.jito.wtf}
+      - JITO_TIP_ACCOUNT=${JITO_TIP_ACCOUNT:-96gYZGDn1HcCqUoA1c8jMxJWkn2LxTYgW1fQbT1PqNqQ}
+      - JITO_AUTH_KEYPAIR=${JITO_AUTH_KEYPAIR:-}
+      - WALLET_PRIVATE_KEY=${WALLET_PRIVATE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_BASE_URL=${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - DATABASE_PATH=/app/data/stack.db
+      - DEFAULT_TIP_SOL=${DEFAULT_TIP_SOL:-0.001}
+      - MIN_TIP_SOL=${MIN_TIP_SOL:-0.0001}
+      - MAX_TIP_SOL=${MAX_TIP_SOL:-0.1}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "process.exit(require('fs').existsSync('/app/data/stack.db')?0:1)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s

@@ -1,0 +1,30 @@
+{
+  "name": "smart-transaction-stack",
+  "version": "1.0.0",
+  "description": "Production-grade Smart Transaction Stack for Solana with AI-driven execution",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "demo": "npx ts-node demo/run.ts",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.95.0",
+    "@triton-one/yellowstone-grpc": "^5.0.0",
+    "sql.js": "^1.11.0",
+    "dotenv": "^16.4.7",
+    "jito-ts": "^4.2.0",
+    "openai": "^4.77.0",
+    "uuid": "^11.0.0",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+
+    "@types/node": "^22.10.0",
+    "@types/uuid": "^10.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0"
+  }
+}
